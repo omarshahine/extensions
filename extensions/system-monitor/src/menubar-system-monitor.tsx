@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { MenuBarExtra, Icon } from "@raycast/api";
+import { MenuBarExtra, Icon, getPreferenceValues, Image } from "@raycast/api";
 import { usePromise, runAppleScript } from "@raycast/utils";
 import { useInterval } from "usehooks-ts";
 
@@ -13,6 +13,8 @@ import { getBatteryData } from "./Power/PowerUtils";
 import { formatBytes, isObjectEmpty } from "./utils";
 
 export default function Command() {
+  const { customIconUrl } = getPreferenceValues();
+
   const {
     data: systemInfo,
     revalidate: revalidateSystem,
@@ -20,6 +22,7 @@ export default function Command() {
   } = usePromise(async () => {
     const osInfo = await getOSInfo();
     const storage = await calculateDiskStorage();
+
     return { osInfo, storage };
   });
 
@@ -96,15 +99,24 @@ export default function Command() {
   }, 1000);
 
   return (
-    <MenuBarExtra icon={{ source: "command-icon.png" }} tooltip="System Monitor" isLoading={isLoading}>
+    <MenuBarExtra
+      icon={{
+        source: customIconUrl || "command-icon.png",
+        mask: Image.Mask.RoundedRectangle,
+        fallback: "command-icon.png",
+      }}
+      tooltip="System Monitor"
+      isLoading={isLoading}
+    >
       <MenuBarExtra.Section title="System Info">
         <MenuBarExtra.Item
           title="macOS"
           subtitle={`${systemInfo?.osInfo.release}` || "Loading..."}
           icon={Icon.Finder}
-          onAction={() => {}}
+          onAction={() => runAppleScript(openActivityMonitorAppleScript())}
         />
       </MenuBarExtra.Section>
+
       <MenuBarExtra.Section title="Storage">
         {systemInfo?.storage.map((disk, index) => (
           <MenuBarExtra.Item
@@ -116,6 +128,7 @@ export default function Command() {
           />
         ))}
       </MenuBarExtra.Section>
+
       <MenuBarExtra.Section title="CPU">
         <MenuBarExtra.Item
           title="CPU Usage"
@@ -124,6 +137,7 @@ export default function Command() {
           onAction={() => runAppleScript(openActivityMonitorAppleScript(1))}
         />
       </MenuBarExtra.Section>
+
       <MenuBarExtra.Section title="Memory">
         <MenuBarExtra.Item
           title="Memory Usage"
@@ -132,21 +146,24 @@ export default function Command() {
           onAction={() => runAppleScript(openActivityMonitorAppleScript(2))}
         />
       </MenuBarExtra.Section>
+
       <MenuBarExtra.Section title="Network">
         <MenuBarExtra.Item
           title="Network Usage"
           subtitle={
-            `↓ ${networkUsage?.download !== undefined ? formatBytes(networkUsage.download) : "0 B"}/s ↑ ${networkUsage?.upload !== undefined ? formatBytes(networkUsage.upload) : "0 B"}/s` ||
-            "Loading..."
+            `↓ ${networkUsage?.download !== undefined ? formatBytes(networkUsage.download) : "0 B"}/s ↑ ${
+              networkUsage?.upload !== undefined ? formatBytes(networkUsage.upload) : "0 B"
+            }/s` || "Loading..."
           }
           icon={Icon.Network}
           onAction={() => runAppleScript(openActivityMonitorAppleScript(5))}
         />
       </MenuBarExtra.Section>
+
       <MenuBarExtra.Section title="Power">
         <MenuBarExtra.Item
           title="Battery"
-          subtitle={batteryData?.batteryData ? `${batteryData?.batteryData?.batteryLevel} %` : "Loading…"}
+          subtitle={batteryData?.batteryData ? `${batteryData?.batteryData?.batteryLevel} %` : "Loading..."}
           icon={Icon.Plug}
           onAction={() => runAppleScript(openActivityMonitorAppleScript(3))}
         />

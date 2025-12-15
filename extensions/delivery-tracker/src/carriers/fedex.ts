@@ -1,13 +1,13 @@
-import { Package } from "../package";
-import { Cache, getPreferenceValues } from "@raycast/api";
-import fetch from "node-fetch";
-import { Delivery } from "../delivery";
+import { packagesFromOfflineCarrier } from "../package";
+import { getPreferenceValues, Cache } from "@raycast/api";
+import { Package } from "../types/package";
+import { Delivery } from "../types/delivery";
 
 const cache = new Cache();
 const cacheKey = "fedexLogin";
 const host = "apis.fedex.com";
 
-export async function ableToTrackFedexRemotely(): Promise<boolean> {
+export function ableToTrackFedexRemotely(): boolean {
   const preferences = getPreferenceValues<Preferences.TrackDeliveries>();
   const apiKey = preferences.fedexApiKey;
   const secretKey = preferences.fedexSecretKey;
@@ -29,8 +29,8 @@ export async function updateFedexTracking(delivery: Delivery): Promise<Package[]
   const secretKey = preferences.fedexSecretKey;
 
   if (!apiKey || !secretKey) {
-    console.log(`Unable to update tracking for ${trackingNumber} because apiKey or secretKey is missing`);
-    throw new Error("FedEx API key or secret key is missing.  Ensure they are filled in this extension's settings.");
+    console.log(`Unable to update remote tracking for ${trackingNumber} because apiKey or secretKey is missing`);
+    return packagesFromOfflineCarrier(delivery);
   }
 
   const loginResponse = await loginWithCachedData(apiKey, secretKey);

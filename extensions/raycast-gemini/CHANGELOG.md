@@ -1,5 +1,42 @@
 # Google Gemini Changelog
 
+## [Update Models] - 2025-08-04
+
+- ⬆️ Update Gemini 2.5 series models from preview to production ready versions.
+
+## [Add Safety Settings] - 2025-07-03
+
+- 🛡️ Now users can set their safety filtering options as they need.
+- 🐛 Fix a bug in AI chat
+
+## [New Model] - 2025-05-14
+
+- 🆕 New Model: Gemini 2.5 Pro Preview 0506
+
+## [New Model] - 2025-04-25
+
+- 🆕 New Model: Gemini 2.5 Flash Experimental
+
+## [New Model and Code Improvements] - 2025-03-26
+
+- 🆕 New Model: Gemini 2.5 Pro Experimental
+- 🛠️ Code Improvements: show error messages, and add new error code handling
+
+## [Fix Create Chat Functionality] - 2025-03-24
+
+- 🛠️ aiChat - Fixed the issue where the "Create Chat" functionality always set the chat name to "New Chat X" instead of using the name provided by the user.
+  - Updated the `CreateChat` component to use the chat name provided by the user. If the user does not provide a chat name, the `createNewChatName` function is used as a fallback.
+  - Added validation to ensure that the chat name is unique and not blank.
+
+## [Updated Models] - 2025-03-15
+
+- ⬆️ Upgrade the Gemini 2.0 Flash from preview to release
+- ⚠️ Add alerts to models that will be deprecated in Sep 2025
+
+## [New Command] - 2025-03-12
+
+- 🆕 New Command: Command History: now you can 📜 view your command history.
+
 ## [New Command] - 2025-03-10
 
 - 🆕 New Command: Ask About Selected Screen Area

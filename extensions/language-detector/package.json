@@ -6,6 +6,10 @@
   "description": "Detect languages through Raycast AI or third-party language detectors.",
   "icon": "language-detector-icon.png",
   "author": "litomore",
+  "platforms": [
+    "macOS",
+    "Windows"
+  ],
   "categories": [
     "Fun",
     "Media",
@@ -49,43 +53,20 @@
       ]
     }
   ],
-  "preferences": [
-    {
-      "name": "detector",
-      "title": "Detector",
-      "description": "Choose the language detector.",
-      "type": "dropdown",
-      "required": false,
-      "default": "ai",
-      "data": [
-        {
-          "title": "Raycast AI",
-          "value": "ai"
-        },
-        {
-          "title": "npm:languagedetect",
-          "value": "languagedetect"
-        },
-        {
-          "title": "npm:tinyld",
-          "value": "tinyld"
-        }
-      ]
-    }
-  ],
   "dependencies": {
-    "@raycast/api": "^1.92.1",
-    "@raycast/utils": "^1.18.1",
-    "mac-say": "^0.3.1",
+    "@raycast/api": "^1.102.6",
+    "@raycast/utils": "^2.2.1",
+    "mac-say": "^0.3.3",
+    "raycast-backend-api": "^0.1.2",
     "raycast-cross-extension": "^0.2.3",
-    "raycast-language-detector": "^0.1.1"
+    "raycast-language-detector": "^0.2.4"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "^1.0.11",
-    "@types/node": "^22.13.5",
-    "@types/react": "^18.3.12",
-    "eslint": "^8.57.1",
-    "prettier": "^3.5.2",
-    "typescript": "^5.7.3"
+    "@raycast/eslint-config": "^2.0.4",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.11",
+    "eslint": "^9.34.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2"
   }
 }

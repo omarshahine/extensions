@@ -15,11 +15,7 @@ import Service, { Icon } from "./service";
 import { toDataURI, toSvg, toURL, copyToClipboard } from "./utils";
 import { primaryActionEnum, iconColorEnum } from "./types/perferenceValues";
 
-const { primaryAction } = getPreferenceValues<{
-  primaryAction: primaryActionEnum;
-}>();
-
-const { iconColor } = getPreferenceValues<{ iconColor: iconColorEnum }>();
+const { primaryAction, iconColor, customColor } = getPreferenceValues<Preferences>();
 
 const service = new Service();
 
@@ -49,20 +45,22 @@ function Command() {
       {icons.map((icon) => {
         const { set, id, body, width, height } = icon;
         const { id: setId, title: setName } = set;
-        const svgIcon = toSvg(body, width, height, iconColor);
+        const svgIcon = toSvg(
+          body,
+          width,
+          height,
+          iconColor === iconColorEnum.customColor &&
+            customColor &&
+            /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(customColor)
+            ? customColor
+            : iconColor,
+        );
         const dataURIIcon = toDataURI(svgIcon);
 
-        const paste = (
-          // eslint-disable-next-line @raycast/prefer-title-case
-          <Action.Paste title="Paste SVG String" content={svgIcon} />
-        );
-        const copy = (
-          // eslint-disable-next-line @raycast/prefer-title-case
-          <Action.CopyToClipboard title="Copy SVG String" content={svgIcon} />
-        );
+        const paste = <Action.Paste title="Paste SVG String" content={svgIcon} />;
+        const copy = <Action.CopyToClipboard title="Copy SVG String" content={svgIcon} />;
         const pasteFile = (
           <Action
-            // eslint-disable-next-line @raycast/prefer-title-case
             title="Paste SVG File"
             icon={RaycastIcon.Clipboard}
             onAction={async () => {
@@ -76,7 +74,6 @@ function Command() {
         );
         const copyFile = (
           <Action
-            // eslint-disable-next-line @raycast/prefer-title-case
             title="Copy SVG File"
             icon={RaycastIcon.Clipboard}
             onAction={async () => {
@@ -92,10 +89,7 @@ function Command() {
         const pasteName = setId && <Action.Paste title="Paste Name" content={`${setId}:${id}`} />;
         const copyName = <Action.CopyToClipboard title="Copy Name" content={`${setId}:${id}`} />;
         const copyURL = <Action.CopyToClipboard title="Copy URL" content={toURL(setId, id)} />;
-        const copyDataURI = (
-          // eslint-disable-next-line @raycast/prefer-title-case
-          <Action.CopyToClipboard title="Copy Data URI" content={dataURIIcon} />
-        );
+        const copyDataURI = <Action.CopyToClipboard title="Copy Data URI" content={dataURIIcon} />;
         return (
           <Grid.Item
             content={{
